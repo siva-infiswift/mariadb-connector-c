@@ -101,12 +101,12 @@ struct my_tests_st
   char *skipmsg;
 };
 
-static char *schema = "test";
-static char *hostname = 0;
-static char *password = 0;
+static char *schema = "shimla_db";
+static char *hostname = "54.167.207.177";
+static char *password = "Inf1Sw1ft$User";
 static unsigned int port = 0;
 static char *socketname = 0;
-static char *username = 0;
+static char *username = "infiuser";
 /*
 static struct my_option test_options[] =
 {
@@ -422,6 +422,7 @@ static int reset_connection(MYSQL *mysql) {
 
   rc= mysql_change_user(mysql, username, password, schema);
   check_mysql_rc(rc, mysql);
+#if 0
   if (mysql_get_server_version(mysql) < 50400)
     rc= mysql_query(mysql, "SET table_type='MyISAM'");
   else
@@ -429,6 +430,7 @@ static int reset_connection(MYSQL *mysql) {
   check_mysql_rc(rc, mysql);
   rc= mysql_query(mysql, "SET sql_mode=''");
   check_mysql_rc(rc, mysql);
+#endif
 
   return OK;
 }

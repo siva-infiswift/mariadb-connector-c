@@ -16,6 +16,7 @@
 */
 #include "my_test.h"
 #include "ma_common.h"
+#include <stdio.h>
 
 
 #ifndef _WIN32
@@ -126,7 +127,7 @@ static int async1(MYSQL *my)
   uint default_timeout;
   int i;
 
-  for (i=0; i < 100; i++)
+  /* for (i=0; i < 100; i++) */
   {
 
     mysql_init(&mysql);
@@ -150,7 +151,7 @@ static int async1(MYSQL *my)
     }
     FAIL_IF(!ret, "Failed to mysql_real_connect()");
 
-    status= mysql_real_query_start(&err, &mysql, SL("SHOW STATUS"));
+    status= mysql_real_query_start(&err, &mysql, SL("select * from shimla_db.sessions"));
     while (status)
     {
       status= wait_for_mysql(&mysql, status);
@@ -164,6 +165,7 @@ static int async1(MYSQL *my)
 
     for (;;)
     {
+      int i;
       status= mysql_fetch_row_start(&row, res);
       while (status)
       {
@@ -172,6 +174,9 @@ static int async1(MYSQL *my)
       }
       if (!row)
         break;
+    for(i = 0; i < mysql_num_fields(res); i++)
+      printf("%s | ", row[i]);
+    printf("\n");
     }
     FAIL_IF(mysql_errno(&mysql), "Got error while retrieving rows");
     mysql_free_result(res);
